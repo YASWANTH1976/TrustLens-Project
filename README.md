@@ -38,15 +38,6 @@
 
 ---
 
-## 📸 System Previews
-
-### **1. The Command Center**
-*Live threat monitoring with Defcon status and active node logs.*
-![Command Center](https://via.placeholder.com/800x400?text=Command+Center+Dashboard)
-
-### **2. Threat Detection (Phishing)**
-*Instant red-flagging of malicious social engineering attacks.*
-![Threat Detection](https://via.placeholder.com/800x400?text=Malicious+URL+Blocked)
 
 ---
 
