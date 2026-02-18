@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 # --- CONFIGURATION ---
 # PASTE YOUR API KEY HERE
-GENAI_API_KEY = "AIzaSyB9gCe9AbqcN8k7HgHSUZSveRfRxj4wCTM" 
+GENAI_API_KEY = "YOUR_API_KEY" 
 
 try:
     genai.configure(api_key=GENAI_API_KEY)
@@ -267,4 +267,5 @@ def get_stats():
     })
 
 if __name__ == '__main__':
+
     app.run(host='0.0.0.0', port=5000, debug=True)
