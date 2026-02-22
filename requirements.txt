@@ -1,0 +1,6 @@
+flask
+google-generativeai
+textblob
+newspaper3k
+duckduckgo-search
+requests
