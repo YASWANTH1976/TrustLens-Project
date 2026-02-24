@@ -1,6 +1,4 @@
 # 🛡️ TrustLens: AI & Blockchain Threat Intelligence
-
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Click_Here-00f2ea?style=for-the-badge)](#) [![Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-Backend-green?style=for-the-badge&logo=flask)](https://flask.palletsprojects.com/)
 [![Gemini](https://img.shields.io/badge/Gemini_2.5-AI_Engine-orange?style=for-the-badge)](https://deepmind.google/technologies/gemini/)
 
