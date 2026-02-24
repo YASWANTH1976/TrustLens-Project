@@ -18,7 +18,7 @@ from blockchain.blockchain import Blockchain # Ensure your blockchain.py is in a
 app = Flask(__name__)
 
 # --- CONFIGURATION ---
-GENAI_API_KEY = "AIzaSyDk7c380Si281ffvXR7SA7YT4etq7I-gQM"
+GENAI_API_KEY = "YOUR_API_KEY"
 try:
     genai.configure(api_key=GENAI_API_KEY)
     model = genai.GenerativeModel('models/gemini-2.5-flash')
