@@ -91,6 +91,16 @@ def scrape_url(url):
         print(f"Scraping Blocked: {e}")
         return None
 
+def optimize_search_query(text):
+    """Agentic AI pre-processes the user input to generate an optimal search query."""
+    try:
+        prompt = f"Extract the primary news event from this text to use as a search engine query. Keep it under 6 words. Only return the search query, no extra text. Text: {text[:500]}"
+        response = model.generate_content(prompt)
+        return response.text.strip().replace('"', '')
+    except Exception as e:
+        print(f"Query Optimizer Failed: {e}")
+        return text[:100]
+
 def search_web_agent(query):
     """Uses DuckDuckGo to find sources. Falls back to Google Search link if blocked."""
     sources = []
@@ -132,8 +142,8 @@ def analyze_with_gemini(text, url, search_context):
     
     Respond STRICTLY in valid JSON format:
     {{
-        "verdict": "Fake",
-        "confidence": 85,
+        "verdict": "Real",
+        "confidence": 95,
         "explanation": "Provide a detailed 2-sentence reason pointing to specific facts.",
         "abstract": "Provide a 1-sentence summary for the blockchain ledger."
     }}
@@ -176,17 +186,20 @@ def verify_news():
         scraped = scrape_url(user_input)
         if scraped: news_text = scraped
     
-    sources, search_context = search_web_agent(news_text[:150])
+    # 2. Agentic Query Optimization
+    optimized_query = optimize_search_query(news_text)
+    print(f"Optimized Search Query: {optimized_query}")
+    sources, search_context = search_web_agent(optimized_query)
 
-    # 2. Real Geolocation
+    # 3. Real Geolocation
     server_loc = get_real_server_location(url)
 
-    # 3. AI Analysis
+    # 4. AI Analysis
     ai_result = analyze_with_gemini(news_text, url, search_context)
     prediction = ai_result.get("verdict", "Unsure")
     confidence = ai_result.get("confidence", 50)
     
-    # 4. Threat Metrics
+    # 5. Threat Metrics
     if prediction in ["Fake", "Malicious"]:
         SYSTEM_STATS['threats'] += 1
         cyber_report_id = f"CYBER-INCIDENT-{random.randint(10000,99999)}" if prediction == "Malicious" else None
@@ -196,7 +209,7 @@ def verify_news():
     update_system_defcon()
     sentiment_score, bias_score = analyze_sentiment(news_text)
     
-    # 5. Blockchain Anchoring
+    # 6. Blockchain Anchoring
     try:
         last_block = blockchain.last_block
         block = blockchain.new_block(proof=123, previous_hash=last_block['previous_hash'])
@@ -246,5 +259,5 @@ def get_stats():
     })
 
 if __name__ == '__main__':
-    # Runs the app locally, safe for your demo!
+    # Runs the app locally
     app.run(debug=True)
