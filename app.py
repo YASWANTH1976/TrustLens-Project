@@ -11,13 +11,14 @@ from urllib.parse import urlparse
 from flask import Flask, request, jsonify, render_template
 import google.generativeai as genai
 from textblob import TextBlob
-from newspaper import Article, Config
+from newspaper import Article
 from duckduckgo_search import DDGS
-from blockchain.blockchain import Blockchain # Ensure your blockchain.py is in a folder named 'blockchain'
+from blockchain.blockchain import Blockchain 
 
 app = Flask(__name__)
 
 # --- CONFIGURATION ---
+# ⚠️ VIVA REMINDER: Paste your real Gemini API key here before presenting!
 GENAI_API_KEY = "YOUR_API_KEY"
 try:
     genai.configure(api_key=GENAI_API_KEY)
@@ -60,21 +61,34 @@ def get_real_server_location(url):
     return "Location Unverified / Hidden Behind Proxy"
 
 def analyze_sentiment(text):
+    """Calculates Emotional Intensity and Subjective Bias using Lexical NLP."""
     blob = TextBlob(text)
     sentiment = (blob.sentiment.polarity + 1) * 50 
     bias = blob.sentiment.subjectivity * 100
     return round(sentiment, 1), round(bias, 1)
 
 def scrape_url(url):
+    """Scrapes URL text using Browser Spoofing to bypass basic bot firewalls."""
     try:
-        config = Config()
-        config.browser_user_agent = 'Mozilla/5.0'
-        config.request_timeout = 5
-        article = Article(url, config=config)
-        article.download()
+        # Create a highly realistic fake browser fingerprint
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Referer': 'https://www.google.com/' # Tricks them into thinking you clicked from Google
+        }
+        
+        # Download the HTML using requests (which handles headers better)
+        response = requests.get(url, headers=headers, timeout=8)
+        
+        # Feed the downloaded HTML directly into newspaper3k
+        article = Article(url)
+        article.download(input_html=response.text)
         article.parse()
+        
         return f"{article.title}. {article.text}"[:4000]
-    except: 
+    except Exception as e:
+        print(f"Scraping Blocked: {e}")
         return None
 
 def search_web_agent(query):
@@ -231,4 +245,5 @@ def get_stats():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Runs the app locally, safe for your demo!
+    app.run(debug=True)
