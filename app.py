@@ -18,7 +18,8 @@ from blockchain.blockchain import Blockchain
 app = Flask(__name__)
 
 # --- CONFIGURATION ---
-GENAI_API_KEY = "YOUR_API_KEY"
+# OWASP Security Fix: Fetch API key securely from environment variables
+GENAI_API_KEY = os.getenv("GEMINI_API_KEY", "YOUR_ACTUAL_API_KEY_HERE_FOR_LOCAL_TESTING")
 try:
     genai.configure(api_key=GENAI_API_KEY)
     model = genai.GenerativeModel('models/gemini-2.5-flash')
@@ -126,12 +127,13 @@ def analyze_with_gemini(text, url, search_context):
     
     TASK:
     1. Determine if the content is Real, Fake, or Malicious.
-    2. Calculate a 'Factual Entailment Confidence Score' (0-100).
+    2. CRITICAL ENTITY CHECK: Pay strict attention to names of people, places, and organizations. If the claim attributes a real quote or action to the WRONG person (e.g., swapping a politician's name for a CEO), you MUST flag the entire claim as "Fake". 
+    3. Calculate a 'Factual Entailment Confidence Score' (0-100).
     
     Respond STRICTLY in valid JSON format:
     {{
-        "verdict": "Real",
-        "confidence": 95,
+        "verdict": "Fake",
+        "confidence": 85,
         "explanation": "Provide a detailed 2-sentence reason pointing to specific facts.",
         "abstract": "Provide a 1-sentence summary for the blockchain ledger."
     }}
