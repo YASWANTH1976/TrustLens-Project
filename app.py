@@ -18,7 +18,6 @@ from blockchain.blockchain import Blockchain
 app = Flask(__name__)
 
 # --- CONFIGURATION ---
-# ⚠️ VIVA REMINDER: Paste your real Gemini API key here before presenting!
 GENAI_API_KEY = "YOUR_API_KEY"
 try:
     genai.configure(api_key=GENAI_API_KEY)
