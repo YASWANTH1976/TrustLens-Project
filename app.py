@@ -106,7 +106,7 @@ def search_web_agent(query):
     sources = []
     context = ""
     try:
-        results = DDGS().text(query, max_results=3)
+        results = DDGS().text(query, max_results=5)
         if results:
             for r in results:
                 sources.append({"title": r['title'], "url": r['href']})
